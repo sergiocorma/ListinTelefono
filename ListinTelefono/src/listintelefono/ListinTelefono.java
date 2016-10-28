@@ -12,23 +12,54 @@ import java.util.Scanner;
  * @author alumno
  */
 public class ListinTelefono {
-    //Editar contactos
-    public static void editarContactos(String vnombres[], int vnumero[]) {
+    //Declarar variables generales
+   public static String vnombres[]= new String[10];
+   public static String vnumeros[] = new String [10];
+    
+   
+   //funcion eliminar contactos
+   public static void eliminarContactos() {
     Scanner leer = new Scanner(System.in);
             int posicion=0;
-            String nombre="";
-            int telefono=0;
+            String nombre=null;
+            String telefono=null;
+
+            System.out.println("Escriba el nombre del contacto que desea eliminar: ");
+            nombre = leer.nextLine().toUpperCase();
+            
+            //recorro el vector en busca de el nombre que se introduce
+            for (int i=0;i<10;i++){
+                if (nombre.equalsIgnoreCase(vnombres[i])){
+                   
+                    vnombres[i]=null;
+                    vnumeros[i]=null;
+                    System.out.println("El contacto ha sido eliminado.");
+                }
+
+            }
+
+        }
+   
+   
+   
+    //Editar contactos
+    public static void editarContactos() {
+    Scanner leer = new Scanner(System.in);
+            int posicion=0;
+            String nombre=null;
+            String telefono=null;
 
             System.out.println("Escriba el nombre del contacto: ");
-            nombre = leer.nextLine().toLowerCase();
+            nombre = leer.nextLine().toUpperCase();
             
             
             for (int i=0;i<10;i++){
                 if (nombre.equalsIgnoreCase(vnombres[i])){
-                    vnombres[i]=nombre;
-                    System.out.println("Dime el número de telefono de ese contacto: ");
-                    telefono= leer.nextInt();
-                    telefono=vnumero[i];
+                    System.out.println("Dime el nuevo nombre del contacto: ");
+                    vnombres[i]=leer.nextLine().toUpperCase();
+                    System.out.println("Dime el numero de telefono de ese contacto: ");
+                    telefono= leer.nextLine();
+                    vnumeros[i]=telefono;
                 }
 
             }
@@ -36,8 +67,8 @@ public class ListinTelefono {
         }
     
     
-    //Buscar hueco para escribir nombre y número
-    public static int buscarHueco(String vnombres[]){
+    //Buscar hueco para escribir nombre y numero
+    public static int buscarHueco(){
     int posicion=0;
         for (int i=0;i<vnombres.length;i++){
             if (vnombres[i] ==null){
@@ -48,9 +79,9 @@ public class ListinTelefono {
         return posicion;
     }
     //Guardar un contacto
-    public static void guardarContacto(String vnombres[], int vnumeros[]){
+    public static void guardarContacto(){
         int posicion;
-        posicion=buscarHueco(vnombres);
+        posicion=buscarHueco();
         Scanner leer = new Scanner (System.in);
         
         
@@ -58,27 +89,32 @@ public class ListinTelefono {
             System.out.println("No hay hueco disponible.");
         } else {
             System.out.println("Dime tu nombre: ");
-            vnombres[posicion] = leer.nextLine();
-            System.out.println("Dime tu teléfono: ");
-            vnumeros[posicion] = leer.nextInt();
+            vnombres[posicion] = leer.nextLine().toUpperCase();
+            System.out.println("Dime tu telefono: ");
+            vnumeros[posicion] = leer.nextLine();
+            if (vnumeros[posicion].length()!=9) {
+             vnombres[posicion] = null;
+             vnumeros[posicion] = null;
+                System.err.println("El numero de telefono no es valido, debe tener 9 digitos. Introduzca el contacto de nuevo. ");
+            }
             
         }
     
     }
     //Mostrar todos los contactos
-    public static void verContactos(String vnombres[], int vnumeros[]){
+    public static void verContactos(){
     
         System.out.println("Listado de contactos:");
         for (int i=0;i<10;i++){
             if (vnombres[i] != null){
-                System.out.println("Nombre: "+vnombres[i]+" Teléfono:"+vnumeros[i]);
+                System.out.println("Nombre: "+vnombres[i]+" Telefono:"+vnumeros[i]);
             
             }
         }
         
         
     }
-    //Muestra el menú
+    //Muestra el menu
     public static int menu() {
            Scanner leer = new Scanner(System.in);
            int opcion=-1;
@@ -92,7 +128,7 @@ public class ListinTelefono {
             System.out.println("* 4- Eliminar contacto  *");
             System.out.println("* 0- Salir del programa *");
             System.out.println("*************************");
-            System.out.println("Escoge una opción:");
+            System.out.println("Escoge una opcion:");
             opcion=leer.nextInt();
             }
             return opcion;
@@ -100,8 +136,7 @@ public class ListinTelefono {
     
     public static void main(String[] args) {
         boolean bandera=true;
-        String vnombres[]= new String[10];
-        int vnumeros[] = new int [10];
+        
         
         
         
@@ -113,18 +148,19 @@ public class ListinTelefono {
                 break;
                 
             case 1:
-                guardarContacto(vnombres, vnumeros);
+                guardarContacto();
                 break;
                 
             case 2:
-                verContactos(vnombres, vnumeros);
+                verContactos();
                 break;
                 
             case 3:
-                editarContactos(vnombres, vnumeros);
+                editarContactos();
                 break;
                 
             case 4:
+                eliminarContactos();
                 break;
                 
             default:
